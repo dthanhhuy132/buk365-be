@@ -70,7 +70,7 @@ export const login = asyncMiddleware(async (req, res) => {
     );
 
     if (!isMatchPassword) {
-      throw successSendMessage(404, "Password is incorrect", res);
+      throw successSendMessage(204, "Password is incorrect", res);
     }
 
     const payload = generateTokens(isExistEmail);

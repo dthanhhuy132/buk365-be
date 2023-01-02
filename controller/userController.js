@@ -1,12 +1,12 @@
-import Cart from '../models/cartModel.js';
-import User from '../models/useModel.js';
-import { findOne } from '../utils/baseService.js';
+import Cart from "../models/cartModel.js";
+import User from "../models/useModel.js";
+import { findOne } from "../utils/baseService.js";
 import {
   errorsSendMessage,
   successSendData,
-  successSendMessage
-} from '../utils/successResponse.js';
-import asyncMiddleware from '../middleware/asyncMiddleware.js';
+  successSendMessage,
+} from "../utils/successResponse.js";
+import asyncMiddleware from "../middleware/asyncMiddleware.js";
 
 export const getAllUser = asyncMiddleware(async (req, res) => {
   const user = await User.find({});
@@ -20,12 +20,12 @@ export const getUserById = asyncMiddleware(async (req, res) => {
   const cart = await findOne(Cart, { user: userId });
 
   if (!user) {
-    throw errorsSendMessage(404, 'User is not found', res);
+    throw errorsSendMessage(404, "User is not found", res);
   }
 
   const resData = {
     user,
-    cart
+    cart,
   };
 
   return successSendData(200, resData, res);
