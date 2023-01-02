@@ -18,7 +18,6 @@ connectDB();
 //middleware
 app.use(
   cors({
-    origin: "https://book-store-zeta-flame.vercel.app/",
     credentials: true,
   })
 );
