@@ -20,12 +20,15 @@ app.use(function (req, res, next) {
 connectDB();
 
 //middleware
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
-  })
-);
+const corsOpts = {
+  origin: "*",
+
+  methods: ["GET", "POST", "OPTIONS"],
+
+  allowedHeaders: ["Content-Type"],
+};
+
+app.use(cors(corsOpts));
 morganBody(app);
 
 const PORT = process.env.PORT || 5000;
