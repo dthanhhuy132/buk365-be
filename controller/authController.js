@@ -57,59 +57,62 @@ export const registerUser = asyncMiddleware(async (req, res) => {
 
 export const login = asyncMiddleware(async (req, res) => {
   const { email, password, userNumber } = req.body;
-  const isExistEmail = await findOne(User, { email });
-  const isExistPhone = await findOne(User, { userNumber });
 
-  if (email) {
-    if (!isExistEmail) {
-      throw successSendMessage(404, "User is not found", res);
-    }
-    const isMatchPassword = await User.comparePassword(
-      password,
-      isExistEmail.password
-    );
+  try {
+    const isExistEmail = await findOne(User, { email });
+    const isExistPhone = await findOne(User, { userNumber });
 
-    if (!isMatchPassword) {
-      throw successSendMessage(404, "Password is incorrect", res);
-    }
+    if (email) {
+      if (!isExistEmail) {
+        throw successSendMessage(404, "User is not found", res);
+      }
+      const isMatchPassword = await User.comparePassword(
+        password,
+        isExistEmail.password
+      );
 
-    const payload = generateTokens(isExistEmail);
+      if (!isMatchPassword) {
+        throw successSendMessage(404, "Password is incorrect", res);
+      }
 
-    const data = {
-      user: {
-        ...isExistEmail._doc,
-      },
-      ...payload,
-    };
+      const payload = generateTokens(isExistEmail);
 
-    return successSendData(200, data, res);
-  }
+      const data = {
+        user: {
+          ...isExistEmail._doc,
+        },
+        ...payload,
+      };
 
-  if (userNumber) {
-    if (!isExistPhone) {
-      throw successSendMessage(404, "Phone is not found", res);
+      return successSendData(200, data, res);
     }
 
-    const isMatchPassword = await User.comparePassword(
-      password,
-      isExistPhone.password
-    );
+    if (userNumber) {
+      if (!isExistPhone) {
+        throw successSendMessage(404, "Phone is not found", res);
+      }
 
-    if (!isMatchPassword) {
-      throw successSendMessage(404, "Password is incorrect", res);
+      const isMatchPassword = await User.comparePassword(
+        password,
+        isExistPhone.password
+      );
+
+      if (!isMatchPassword) {
+        throw successSendMessage(404, "Password is incorrect", res);
+      }
+
+      const payload = generateTokens(isExistPhone);
+
+      const data = {
+        user: {
+          ...isExistPhone._doc,
+        },
+        ...payload,
+      };
+
+      return successSendData(200, data, res);
     }
-
-    const payload = generateTokens(isExistPhone);
-
-    const data = {
-      user: {
-        ...isExistPhone._doc,
-      },
-      ...payload,
-    };
-
-    return successSendData(200, data, res);
-  }
+  } catch (error) {}
 });
 
 export const refreshToken = asyncMiddleware(async (req, res) => {
