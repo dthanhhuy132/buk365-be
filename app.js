@@ -12,6 +12,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  next();
+});
 //connect DB
 connectDB();
 
@@ -23,6 +27,7 @@ const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
 
 app.use("/api", root);
+
 app.use("/image", express.static(path.join(__dirname, "uploads")));
 
 app.listen(PORT, () => console.log(`Server connect port ${PORT}`));
