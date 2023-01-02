@@ -27,32 +27,34 @@ const dataCart = {
 
 export const registerUser = asyncMiddleware(async (req, res) => {
   const { email, password, userNumber, role } = req.body;
-  const isExistEmail = await findOne(User, { email });
-  const isExistNumber = await findOne(User, { userNumber });
+  try {
+    const isExistEmail = await findOne(User, { email });
+    const isExistNumber = await findOne(User, { userNumber });
 
-  if (isExistEmail || isExistNumber) {
-    throw successSendMessage(400, "User is exist", res);
-  }
+    if (isExistEmail || isExistNumber) {
+      throw successSendMessage(400, "User is exist", res);
+    }
 
-  const newUser = await create(User, {
-    ...dataUser,
-    email,
-    password,
-    userNumber,
-    role: role ? role : "customer",
-  });
+    const newUser = await create(User, {
+      ...dataUser,
+      email,
+      password,
+      userNumber,
+      role: role ? role : "customer",
+    });
 
-  const newCart = await create(Cart, {
-    ...dataCart,
-    user: newUser._id,
-  });
+    const newCart = await create(Cart, {
+      ...dataCart,
+      user: newUser._id,
+    });
 
-  const dataResponse = {
-    user: newUser,
-    cart: newCart,
-  };
+    const dataResponse = {
+      user: newUser,
+      cart: newCart,
+    };
 
-  return successSendData(201, dataResponse, res);
+    return successSendData(201, dataResponse, res);
+  } catch (error) {}
 });
 
 export const login = asyncMiddleware(async (req, res) => {
