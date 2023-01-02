@@ -26,7 +26,13 @@ const corsOpts = {
   allowedHeaders: ["Content-Type"],
 };
 
-app.use(cors);
+app.use(
+  cors({
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    preflightContinue: true,
+  })
+);
 morganBody(app);
 
 const PORT = process.env.PORT || 5000;
