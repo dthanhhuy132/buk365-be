@@ -16,7 +16,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 connectDB();
 
 //middleware
-app.use(cors({ origin: true, credentials: true }));
+app.use(
+  cors({
+    origin: "https://book-store-zeta-flame.vercel.app/",
+    credentials: true,
+  })
+);
 morganBody(app);
 
 const PORT = process.env.PORT || 5000;
