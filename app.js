@@ -16,11 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 connectDB();
 
 //middleware
-app.use(
-  cors({
-    credentials: true,
-  })
-);
+app.use(cors());
 morganBody(app);
 
 const PORT = process.env.PORT || 5000;
